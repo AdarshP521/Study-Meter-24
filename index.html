@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Level Tracker</title>
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8881XEG5Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-V8881XEG5Y');
+</script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 20%, #ffcc02 40%, #ff4757 60%, #ff3838 80%, #ff6b35 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                20px 20px 40px rgba(255, 107, 53, 0.1),
+                -20px -20px 40px rgba(255, 204, 2, 0.1);
+            padding: 50px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.05) 100%);
+            border-radius: 35px;
+            pointer-events: none;
+        }
+
+        .container:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                25px 25px 50px rgba(255, 107, 53, 0.15),
+                -25px -25px 50px rgba(255, 204, 2, 0.15);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: black;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider-container {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .slider-label {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 -2px 4px rgba(255, 255, 255, 0.2),
+                0 4px 8px rgba(0, 0, 0, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 20px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .slider:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                inset 0 3px 6px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(255, 255, 255, 0.25),
+                0 6px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .slider:active {
+            transform: scale(0.98);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            cursor: pointer;
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 
+                0 8px 25px rgba(255, 107, 53, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 107, 53, 0.3);
+            background: linear-gradient(135deg, #ff7a47, #ff9f2e);
+        }
+
+        .slider::-webkit-slider-thumb:active {
+            transform: scale(1.25);
+            box-shadow: 
+                0 10px 30px rgba(255, 107, 53, 0.5),
+                inset 0 3px 6px rgba(255, 255, 255, 0.6),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(135deg, #ff8f5a, #ffb041);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 
+                0 8px 25px rgba(255, 107, 53, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 107, 53, 0.3);
+            background: linear-gradient(135deg, #ff7a47, #ff9f2e);
+        }
+
+        .slider::-moz-range-thumb:active {
+            transform: scale(1.25);
+            background: linear-gradient(135deg, #ff8f5a, #ffb041);
+        }
+
+        .hours-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 25px 0;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+                0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hours-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .hours-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+        }
+
+        .hours-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .result-container {
+            margin-top: 30px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 25px;
+            padding: 30px;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-message {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes thumbPulse {
+            0% {
+                transform: scale(1.25);
+                box-shadow: 
+                    0 10px 30px rgba(255, 107, 53, 0.5),
+                    inset 0 3px 6px rgba(255, 255, 255, 0.6),
+                    inset 0 -3px 6px rgba(0, 0, 0, 0.3),
+                    0 0 25px rgba(255, 107, 53, 0.4);
+            }
+            50% {
+                transform: scale(1.35);
+                box-shadow: 
+                    0 12px 35px rgba(255, 107, 53, 0.6),
+                    inset 0 4px 8px rgba(255, 255, 255, 0.7),
+                    inset 0 -4px 8px rgba(0, 0, 0, 0.4),
+                    0 0 30px rgba(255, 107, 53, 0.5);
+            }
+            100% {
+                transform: scale(1.25);
+                box-shadow: 
+                    0 10px 30px rgba(255, 107, 53, 0.5),
+                    inset 0 3px 6px rgba(255, 255, 255, 0.6),
+                    inset 0 -3px 6px rgba(0, 0, 0, 0.3),
+                    0 0 25px rgba(255, 107, 53, 0.4);
+            }
+        }
+
+        .scale-marks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .hours-value {
+                font-size: 1.5rem;
+            }
+            
+            .result-title {
+                font-size: 1.3rem;
+            }
+            
+            .result-message {
+                font-size: 1rem;
+            }
+        }
+
+        .footer-signature {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.13);
+            border-top: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            color: #222;
+            font-size: 1rem;
+            text-align: center;
+            padding: 10px 0 8px 0;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            border-radius: 18px 18px 0 0;
+            margin: 0 10px 8px 10px;
+        }
+        @media (max-width: 600px) {
+            .footer-signature {
+                font-size: 0.95rem;
+                padding: 8px 0 6px 0;
+                margin: 0 4px 4px 4px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">📚 Study Level Tracker</h1>
+        <p class="subtitle">How many hours did you study today?</p>
+        
+        <div class="slider-container">
+            <div class="slider-label">Study Hours</div>
+            <input type="range" min="0" max="24" value="0" class="slider" id="studySlider">
+            <div class="scale-marks">
+                <span>0h</span>
+                <span>12h</span>
+                <span>24h</span>
+            </div>
+        </div>
+        
+        <div class="hours-display">
+            <div class="hours-value" id="hoursValue">0</div>
+            <div class="hours-text">hours studied</div>
+        </div>
+        
+        <div class="result-container">
+            <div class="result" id="result">
+                <div class="emoji">🤔</div>
+                <div class="result-title">Ready to Start?</div>
+                <div class="result-message">Move the slider to see your study level!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('studySlider');
+        const hoursValue = document.getElementById('hoursValue');
+        const result = document.getElementById('result');
+
+        const studyLevels = [
+            { hours: 0, emoji: "😴", title: "Couch Potato Mode", message: "Netflix called, they want their champion back! Time to hit the books!" },
+            { hours: 1, emoji: "🐌", title: "Snail Pace Scholar", message: "Slow and steady... but maybe pick up the pace a tiny bit? 🐢" },
+            { hours: 2, emoji: "🌱", title: "Seedling Student", message: "You're sprouting! Keep watering that brain with knowledge!" },
+            { hours: 3, emoji: "🚲", title: "Casual Cruiser", message: "Nice pace! You're cycling through knowledge like a pro!" },
+            { hours: 4, emoji: "⚡", title: "Getting Charged Up", message: "The energy is building! Your brain cells are doing happy dances!" },
+            { hours: 5, emoji: "🔥", title: "Fire Student", message: "You're heating up! Books better watch out - you mean business!" },
+            { hours: 6, emoji: "🚀", title: "Rocket Learner", message: "Houston, we have liftoff! You're soaring through subjects!" },
+            { hours: 7, emoji: "⭐", title: "Shining Star", message: "You're glowing with knowledge! Teachers everywhere are proud!" },
+            { hours: 8, emoji: "🎯", title: "Target Achiever", message: "Bullseye! You're hitting all your study goals like a champion!" },
+            { hours: 9, emoji: "🧠", title: "Brain Power Supreme", message: "Your neurons are throwing a knowledge party! Keep it up!" },
+            { hours: 10, emoji: "🏆", title: "Study Champion", message: "Gold medal performance! You're in the study hall of fame!" },
+            { hours: 11, emoji: "🦉", title: "Wise Owl Level", message: "Whoo's the smartest? YOU are! Wisdom level: Maximum!" },
+            { hours: 12, emoji: "🧙‍♂️", title: "Knowledge Wizard", message: "Abracadabra! You've magically transformed into a study master!" },
+            { hours: 13, emoji: "👑", title: "Study Royalty", message: "Bow down! The King/Queen of Knowledge has arrived!" },
+            { hours: 14, emoji: "🎓", title: "Academic Titan", message: "You've transcended normal student levels! The textbooks bow to you!" },
+            { hours: 15, emoji: "🧠⚡", title: "Mind Overload", message: "Danger zone! Your brain is running at maximum capacity!" },
+            { hours: 16, emoji: "🤖", title: "Study Machine", message: "Beep boop! You've become a learning robot! Efficiency level: 100%!" },
+            { hours: 17, emoji: "🔬", title: "Research Beast", message: "You're conducting experiments on the limits of human knowledge!" },
+            { hours: 18, emoji: "🌟", title: "Stellar Scholar", message: "You're burning brighter than a supernova! But seriously, take a break!" },
+            { hours: 19, emoji: "🦄", title: "Mythical Learner", message: "You're as rare as a unicorn! Nobody studies this much!" },
+            { hours: 20, emoji: "🔥💀", title: "Burnout Warning!", message: "RED ALERT! Your brain is sending distress signals! Rest needed!" },
+            { hours: 21, emoji: "🚨", title: "Emergency Mode", message: "STOP! This is beyond human limits! Call the study police!" },
+            { hours: 22, emoji: "👻", title: "Ghost Student", message: "Are you even human anymore? Your soul has left your body!" },
+            { hours: 23, emoji: "⚰️", title: "Study Zombie", message: "You've died and been reborn as pure knowledge! Please rest!" },
+            { hours: 24, emoji: "🧠💥", title: "EINSTEIN LEVEL - STOP NOW!", message: "You've broken the space-time continuum of studying! Even Einstein would tell you to sleep! 🛑💤" }
+        ];
+
+        function updateResult(hours) {
+            const level = studyLevels[hours];
+            result.innerHTML = `
+                <div class="emoji">${level.emoji}</div>
+                <div class="result-title">${level.title}</div>
+                <div class="result-message">${level.message}</div>
+            `;
+            
+            // Add special animations for extreme levels with enhanced glass effects
+            if (hours >= 20) {
+                result.style.animation = 'bounce 0.3s ease infinite';
+                result.style.background = 'rgba(255, 69, 0, 0.15)';
+                result.style.backdropFilter = 'blur(30px)';
+                result.style.boxShadow = '0 12px 40px rgba(255, 69, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.2)';
+            } else if (hours >= 15) {
+                result.style.animation = 'bounce 0.8s ease infinite';
+                result.style.background = 'rgba(255, 165, 0, 0.12)';
+                result.style.backdropFilter = 'blur(25px)';
+                result.style.boxShadow = '0 10px 35px rgba(255, 165, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.1)';
+            } else if (hours === 24) {
+                result.style.animation = 'bounce 0.2s ease infinite';
+                result.style.background = 'rgba(255, 0, 0, 0.2)';
+                result.style.backdropFilter = 'blur(35px)';
+                result.style.boxShadow = '0 15px 50px rgba(255, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.3)';
+            } else {
+                result.style.animation = 'slideIn 0.5s ease';
+                result.style.background = 'rgba(255, 255, 255, 0.12)';
+                result.style.backdropFilter = 'blur(25px)';
+                result.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.1)';
+            }
+        }
+
+        slider.addEventListener('input', function() {
+            const hours = parseInt(this.value);
+            hoursValue.textContent = hours;
+            updateResult(hours);
+        });
+
+        // Initialize with 0 hours
+        updateResult(0);
+    </script>
+    <footer class="footer-signature">Designed & Developed By Pandey Adarsh</footer>
+    <style>
+        .footer-signature {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.13);
+            border-top: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            color: #222;
+            font-size: 1rem;
+            text-align: center;
+            padding: 10px 0 8px 0;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            border-radius: 18px 18px 0 0;
+            margin: 0 10px 8px 10px;
+        }
+        @media (max-width: 600px) {
+            .footer-signature {
+                font-size: 0.95rem;
+                padding: 8px 0 6px 0;
+                margin: 0 4px 4px 4px;
+            }
+        }
+    </style>
+</body>
+</html>
